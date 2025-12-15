@@ -1,0 +1,22 @@
+{
+  "name": "playwright-porto",
+  "version": "1.0.0",
+  "description": "This is the repository for practice purpose",
+  "main": "index.js",
+  "scripts": {
+    "test": "npx playwright test",
+    "test:chromium": "npx playwright test --project chromium",
+    "test:first": "npx playwright test --grep @first",
+    "test:local": "BASE_URL=http://localhost:4200 npx playwright test",
+    "test:report": "npx playwright test && npx playwright show-report",
+    "test:ui": "npx playwright test --ui"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "",
+  "devDependencies": {
+    "@playwright/test": "^1.47.2",
+    "@types/node": "^22.7.4",
+    "dotenv": "^16.4.5"
+  }
+}
