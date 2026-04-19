@@ -38,3 +38,33 @@ export function createTestUserData(overrides?: Partial<typeof testUser>) {
   };
 }
 
+/**
+ * Known product IDs for testing
+ * These are actual products from practicesoftwaretesting.com
+ */
+export const testProducts = {
+  hammer: "01KCK671ZYPQQW6Q8YEDWHRZZM",
+  pliers: "01KCK671ZAN06V5BVTEYDYTPHN",
+  screwdriver: "01KCK6720PJ6T79ZDK843X5J4B",
+};
+
+/**
+ * Test cart data - products to add during setup
+ */
+export const testCartItems = [
+  {
+    name: "Hammer",
+    quantity: 2,
+  },
+  {
+    name: "Pliers",
+    quantity: 1,
+  },
+];
+
+/**
+ * Expected cart calculations
+ */
+export function calculateCartTotal(items: Array<{ price: number; quantity: number }>) {
+  return items.reduce((total, item) => total + item.price * item.quantity, 0);
+}
