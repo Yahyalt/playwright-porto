@@ -19,7 +19,7 @@ test.describe("API Only Tests - Backend Validation", () => {
     expect(response).toHaveProperty("email");
     expect(response.email).toBe(userData.email);
     expect(response.firstName).toBe(userData.first_name);
-    console.log(`✅ User registered: ${response.email}`);
+    console.log(`User registered: ${response.email}`);
   });
 
   test("should login with valid credentials @api", async ({ request }) => {
@@ -37,7 +37,7 @@ test.describe("API Only Tests - Backend Validation", () => {
     expect(loginResponse).toHaveProperty("tokenType");
     expect(loginResponse.tokenType).toBe("bearer");
     expect(loginResponse.accessToken).toBeTruthy();
-    console.log("✅ Login successful, token received");
+    console.log("Login successful, token received");
   });
 
   test("should reject login with invalid credentials @api", async ({
@@ -52,7 +52,7 @@ test.describe("API Only Tests - Backend Validation", () => {
       expect(true).toBe(false); // Force failure
     } catch (error) {
       expect(error).toBeTruthy();
-      console.log("✅ Invalid login rejected as expected");
+      console.log("Invalid login rejected as expected");
     }
   });
 
@@ -71,7 +71,7 @@ test.describe("API Only Tests - Backend Validation", () => {
     expect(firstProduct).toHaveProperty("name");
     expect(firstProduct).toHaveProperty("price");
     
-    console.log(`✅ Retrieved ${products.length} products`);
+    console.log(`Retrieved ${products.length} products`);
   });
 
   test("should add and remove items from cart @api", async ({ request }) => {
@@ -95,14 +95,14 @@ test.describe("API Only Tests - Backend Validation", () => {
       accessToken
     );
     expect(addResponse).toBeTruthy();
-    console.log(`✅ Added ${testProduct.name} to cart`);
+    console.log(`Added ${testProduct.name} to cart`);
 
     // Verify cart contents
     const cart = await cartAPI.getCart(accessToken);
     expect(cart.length).toBe(1);
     expect(cart[0].quantity).toBe(3);
     expect(cart[0].product_id).toBe(testProduct.id);
-    console.log("✅ Cart contains correct item");
+    console.log("Cart contains correct item");
 
     // Clear cart
     await cartAPI.clearCart(accessToken);
@@ -110,7 +110,7 @@ test.describe("API Only Tests - Backend Validation", () => {
     // Verify cart is empty
     const emptyCart = await cartAPI.getCart(accessToken);
     expect(emptyCart.length).toBe(0);
-    console.log("✅ Cart cleared successfully");
+    console.log("Cart cleared successfully");
   });
 
   test("should handle concurrent cart operations @api", async ({ request }) => {
@@ -132,12 +132,12 @@ test.describe("API Only Tests - Backend Validation", () => {
     );
 
     await Promise.all(addPromises);
-    console.log("✅ Added 3 products concurrently");
+    console.log("Added 3 products concurrently");
 
     // Verify all items in cart
     const cart = await cartAPI.getCart(accessToken);
     expect(cart.length).toBe(3);
-    console.log("✅ All items added successfully");
+    console.log("All items added successfully");
 
     // Cleanup
     await cartAPI.clearCart(accessToken);
@@ -161,6 +161,6 @@ test.describe("API Only Tests - Backend Validation", () => {
       expect(productName).toContain("hammer");
     });
 
-    console.log(`✅ Search returned ${searchResults.length} results for 'hammer'`);
+    console.log(`Search returned ${searchResults.length} results for 'hammer'`);
   });
 });
