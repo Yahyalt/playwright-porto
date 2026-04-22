@@ -34,7 +34,7 @@ export class CartAPI {
   }
 
 
-    const response = await this.request.post(`${this.baseURL}/cart`, {
+    const response = await this.request.post(`${this.baseURL}/carts/${cartId}`, {
       headers,
       data: {
         product_id: productId,
