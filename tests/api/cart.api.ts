@@ -16,7 +16,18 @@ export class CartAPI {
    * @param token - User access token (optional for guest cart)
    * @returns Cart item details
    */
-  async addToCart(productId: string, quantity: number, token?: string) {
+  async createCart(){
+    const response = await this.request.post(`${this.baseURL}/carts`, {
+    data: {}
+  });
+  if (!response.ok()) {
+    throw new Error(`Create cart failed: ${response.status()}`);
+  }
+  return await response.json(); // returns { id: "cart_id" }
+  }
+
+
+
 
 
 
