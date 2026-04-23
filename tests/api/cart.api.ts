@@ -68,12 +68,14 @@ export class CartAPI {
    * @param token - User access token (optional for guest cart)
    * @returns Array of cart items
    */
-  async getCart(token?: string) {
-    const headers = token
-      ? { Authorization: `Bearer ${token}` }
-      : {};
+  async getCart(cartId: string, token?: string ) {
+    const headers: { [key: string]: string } = {};
+    
+ if (token) {
+    headers.Authorization = `Bearer ${token}`;
+  }
 
-    const response = await this.request.get(`${this.baseURL}/cart`, {
+    const response = await this.request.get(`${this.baseURL}/carts/${cartId}`, {
       headers,
     });
 
