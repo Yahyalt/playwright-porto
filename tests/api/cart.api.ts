@@ -153,7 +153,7 @@ export class CartAPI {
    */
   async updateCartItem(cartItemId: string, quantity: number, token: string) {
     const response = await this.request.put(
-      `${this.baseURL}/cart/${cartItemId}`,
+      `${this.baseURL}/carts/${cartItemId}`,
       {
         headers: {
           Authorization: `Bearer ${token}`,
