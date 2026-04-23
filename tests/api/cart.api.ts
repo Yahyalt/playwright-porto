@@ -86,6 +86,37 @@ export class CartAPI {
     return await response.json();
   }
 
+
+
+  /**
+   * Delete one item from cart
+   * @param token - User access token (optional for guest cart)
+   */
+  async deleteProductCartItem(cartId: string, productId: string, token?: string) {
+
+    const headers: { [key: string]: string } = {};
+      
+   if (token) {
+      headers.Authorization = `Bearer ${token}`;
+    }
+  
+      // const headers = token
+      //   ? { Authorization: `Bearer ${token}` }
+      //   : {};
+  
+      const response = await this.request.delete(`${this.baseURL}/carts/${cartId}/product/${productId}`, {
+        headers,
+      });
+  
+      if (!response.ok()) {
+        throw new Error(
+          `Clear cart failed: ${response.status()} ${await response.text()}`
+        );
+      }
+  
+      return null;
+    }
+
   /**
    * Clear all items from cart
    * @param token - User access token (optional for guest cart)
