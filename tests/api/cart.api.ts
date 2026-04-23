@@ -142,7 +142,7 @@ export class CartAPI {
       );
     }
 
-    return await response.json();
+    return null;
   }
 
   /**
