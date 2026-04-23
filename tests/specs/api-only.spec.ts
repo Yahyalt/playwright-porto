@@ -142,8 +142,8 @@ test.describe("API Only Tests - Backend Validation", () => {
     console.log("Added 3 products concurrently");
 
     // Verify all items in cart
-    const cart = await cartAPI.getCart(accessToken);
-    expect(cart.length).toBe(3);
+    const cart = await cartAPI.getCart(cartId, accessToken);
+    expect(cart.cart_items.length).toBe(3);
     console.log("All items added successfully");
 
     // Cleanup
