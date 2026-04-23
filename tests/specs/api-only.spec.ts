@@ -132,10 +132,10 @@ test.describe("API Only Tests - Backend Validation", () => {
 
     // Get products
     const products = await productsAPI.getProducts();
-
+    const { id: cartId } = await cartAPI.createCart();
     // Add multiple products concurrently
     const addPromises = products.slice(0, 3).map((product) =>
-      cartAPI.addToCart(product.id, 1, accessToken)
+      cartAPI.addToCart(cartId, product.id, 1, accessToken)
     );
 
     await Promise.all(addPromises);
