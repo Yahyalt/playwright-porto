@@ -111,11 +111,12 @@ test.describe("API Only Tests - Backend Validation", () => {
     console.log("Cart contains correct item");
 
     // Clear cart
-    await cartAPI.clearCart(accessToken);
+    await cartAPI.deleteProductCartItem(cartId,testProduct.id, accessToken);
     
     // Verify cart is empty
-    const emptyCart = await cartAPI.getCart(accessToken);
-    expect(emptyCart.length).toBe(0);
+    const emptyCart = await cartAPI.getCart(cartId, accessToken);
+    console.log("Empty cart contents:", emptyCart);
+    expect(emptyCart.cart_items.length).toBe(0);
     console.log("Cart cleared successfully");
   });
 
