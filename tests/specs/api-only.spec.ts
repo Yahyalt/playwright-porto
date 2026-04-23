@@ -104,10 +104,10 @@ test.describe("API Only Tests - Backend Validation", () => {
     console.log(`Added ${testProduct.name} to cart`);
 
     // Verify cart contents
-    const cart = await cartAPI.getCart(accessToken);
-    expect(cart.length).toBe(1);
-    expect(cart[0].quantity).toBe(3);
-    expect(cart[0].product_id).toBe(testProduct.id);
+    const cart = await cartAPI.getCart(cartId, accessToken);
+    expect(cart.cart_items.length).toBe(1);
+    expect(cart.cart_items[0].quantity).toBe(3);
+    expect(cart.cart_items[0].product_id).toBe(testProduct.id);
     console.log("Cart contains correct item");
 
     // Clear cart
