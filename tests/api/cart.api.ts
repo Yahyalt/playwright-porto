@@ -123,12 +123,16 @@ export class CartAPI {
    * Clear all items from cart
    * @param token - User access token (optional for guest cart)
    */
-  async clearCart(token?: string) {
-    const headers = token
-      ? { Authorization: `Bearer ${token}` }
-      : {};
+  async clearCart(cartId: string, token?: string) {
 
-    const response = await this.request.delete(`${this.baseURL}/cart`, {
+  const headers: { [key: string]: string } = {};
+    
+ if (token) {
+    headers.Authorization = `Bearer ${token}`;
+  }
+
+
+    const response = await this.request.delete(`${this.baseURL}/carts/${cartId}`, {
       headers,
     });
 
