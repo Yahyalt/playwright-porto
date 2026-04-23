@@ -74,15 +74,20 @@ test.describe("API Only Tests - Backend Validation", () => {
     console.log(`Retrieved ${products.length} products`);
   });
 
+  
   test("should add and remove items from cart @api", async ({ request }) => {
     const authAPI = new AuthAPI(request);
     const cartAPI = new CartAPI(request);
     const productsAPI = new ProductsAPI(request);
+      
 
     // Setup: Register and login
     const userData = createTestUserData();
     await authAPI.register(userData);
     const { accessToken } = await authAPI.login(userData.email, userData.password);
+
+    // Create cart (needed for cartId-based endpoints)
+    const { id: cartId } = await cartAPI.createCart();
 
     // Get a product
     const products = await productsAPI.getProducts();
@@ -90,6 +95,7 @@ test.describe("API Only Tests - Backend Validation", () => {
 
     // Add to cart
     const addResponse = await cartAPI.addToCart(
+      cartId,
       testProduct.id,
       3,
       accessToken
