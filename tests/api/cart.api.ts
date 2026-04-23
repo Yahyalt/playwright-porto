@@ -28,6 +28,7 @@ export class CartAPI {
 
 
 
+  async addToCart(cartId: string, productId: string, quantity: number, token?: string) {
 
 
 
