@@ -104,18 +104,19 @@ test.describe("API Only Tests - Backend Validation", () => {
     console.log(`Added ${testProduct.name} to cart`);
 
     // Verify cart contents
-    const cart = await cartAPI.getCart(accessToken);
-    expect(cart.length).toBe(1);
-    expect(cart[0].quantity).toBe(3);
-    expect(cart[0].product_id).toBe(testProduct.id);
+    const cart = await cartAPI.getCart(cartId, accessToken);
+    expect(cart.cart_items.length).toBe(1);
+    expect(cart.cart_items[0].quantity).toBe(3);
+    expect(cart.cart_items[0].product_id).toBe(testProduct.id);
     console.log("Cart contains correct item");
 
     // Clear cart
-    await cartAPI.clearCart(accessToken);
+    await cartAPI.deleteProductCartItem(cartId,testProduct.id, accessToken);
     
     // Verify cart is empty
-    const emptyCart = await cartAPI.getCart(accessToken);
-    expect(emptyCart.length).toBe(0);
+    const emptyCart = await cartAPI.getCart(cartId, accessToken);
+    console.log("Empty cart contents:", emptyCart);
+    expect(emptyCart.cart_items.length).toBe(0);
     console.log("Cart cleared successfully");
   });
 
@@ -131,22 +132,22 @@ test.describe("API Only Tests - Backend Validation", () => {
 
     // Get products
     const products = await productsAPI.getProducts();
-
+    const { id: cartId } = await cartAPI.createCart();
     // Add multiple products concurrently
     const addPromises = products.slice(0, 3).map((product) =>
-      cartAPI.addToCart(product.id, 1, accessToken)
+      cartAPI.addToCart(cartId, product.id, 1, accessToken)
     );
 
     await Promise.all(addPromises);
     console.log("Added 3 products concurrently");
 
     // Verify all items in cart
-    const cart = await cartAPI.getCart(accessToken);
-    expect(cart.length).toBe(3);
+    const cart = await cartAPI.getCart(cartId, accessToken);
+    expect(cart.cart_items.length).toBe(3);
     console.log("All items added successfully");
 
     // Cleanup
-    await cartAPI.clearCart(accessToken);
+    await cartAPI.clearCart(cartId, accessToken);
   });
 
   test("should validate product search functionality @api", async ({

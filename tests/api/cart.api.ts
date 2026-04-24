@@ -68,12 +68,14 @@ export class CartAPI {
    * @param token - User access token (optional for guest cart)
    * @returns Array of cart items
    */
-  async getCart(token?: string) {
-    const headers = token
-      ? { Authorization: `Bearer ${token}` }
-      : {};
+  async getCart(cartId: string, token?: string ) {
+    const headers: { [key: string]: string } = {};
+    
+ if (token) {
+    headers.Authorization = `Bearer ${token}`;
+  }
 
-    const response = await this.request.get(`${this.baseURL}/cart`, {
+    const response = await this.request.get(`${this.baseURL}/carts/${cartId}`, {
       headers,
     });
 
@@ -86,16 +88,51 @@ export class CartAPI {
     return await response.json();
   }
 
+
+
+  /**
+   * Delete one item from cart
+   * @param token - User access token (optional for guest cart)
+   */
+  async deleteProductCartItem(cartId: string, productId: string, token?: string) {
+
+    const headers: { [key: string]: string } = {};
+      
+   if (token) {
+      headers.Authorization = `Bearer ${token}`;
+    }
+  
+      // const headers = token
+      //   ? { Authorization: `Bearer ${token}` }
+      //   : {};
+  
+      const response = await this.request.delete(`${this.baseURL}/carts/${cartId}/product/${productId}`, {
+        headers,
+      });
+  
+      if (!response.ok()) {
+        throw new Error(
+          `Clear cart failed: ${response.status()} ${await response.text()}`
+        );
+      }
+  
+      return null;
+    }
+
   /**
    * Clear all items from cart
    * @param token - User access token (optional for guest cart)
    */
-  async clearCart(token?: string) {
-    const headers = token
-      ? { Authorization: `Bearer ${token}` }
-      : {};
+  async clearCart(cartId: string, token?: string) {
 
-    const response = await this.request.delete(`${this.baseURL}/cart`, {
+  const headers: { [key: string]: string } = {};
+    
+ if (token) {
+    headers.Authorization = `Bearer ${token}`;
+  }
+
+
+    const response = await this.request.delete(`${this.baseURL}/carts/${cartId}`, {
       headers,
     });
 
@@ -105,7 +142,7 @@ export class CartAPI {
       );
     }
 
-    return await response.json();
+    return null;
   }
 
   /**
@@ -116,7 +153,7 @@ export class CartAPI {
    */
   async updateCartItem(cartItemId: string, quantity: number, token: string) {
     const response = await this.request.put(
-      `${this.baseURL}/cart/${cartItemId}`,
+      `${this.baseURL}/carts/${cartItemId}`,
       {
         headers: {
           Authorization: `Bearer ${token}`,
