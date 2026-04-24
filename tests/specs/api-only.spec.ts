@@ -147,7 +147,7 @@ test.describe("API Only Tests - Backend Validation", () => {
     console.log("All items added successfully");
 
     // Cleanup
-    await cartAPI.clearCart(accessToken);
+    await cartAPI.clearCart(cartId, accessToken);
   });
 
   test("should validate product search functionality @api", async ({
