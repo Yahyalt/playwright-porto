@@ -1,9 +1,8 @@
-// tests/specs/checkout.spec.ts
 import { test, expect } from "@playwright/test";
 import { AuthAPI } from "../api/auth.api";
-// import { CartAPI } from "../api/cart.api";
-// import { ProductsAPI } from "../api/products.api";
-import { createTestUserData, testUser } from "../../fixtures/testData";
+import { CartAPI } from "../api/cart.api";
+import { ProductsAPI } from "../api/products.api";
+import { createTestUserData } from "../../fixtures/testData";
 
 test.describe("Checkout Flow - API + UI Integration", () => {
   let userEmail: string;
