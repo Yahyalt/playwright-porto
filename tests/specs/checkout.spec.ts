@@ -8,12 +8,13 @@ test.describe("Checkout Flow - API + UI Integration", () => {
   let userEmail: string;
   let userPassword: string;
   let accessToken: string;
-
+  let cartId: string;
+  let products: any[];
   test.beforeEach(async ({ request, page }) => {
-    //create test data
+    // Create test data via API
     const authAPI = new AuthAPI(request);
-    // const cartAPI = new CartAPI(request);
-    // const productsAPI = new ProductsAPI(request);
+    const cartAPI = new CartAPI(request);
+    const productsAPI = new ProductsAPI(request);
 
     //register new user via API
     const userData = createTestUserData();
