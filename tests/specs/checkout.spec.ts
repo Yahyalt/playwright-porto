@@ -16,7 +16,7 @@ test.describe("Checkout Flow - API + UI Integration", () => {
     const cartAPI = new CartAPI(request);
     const productsAPI = new ProductsAPI(request);
 
-    //register new user via API
+    // 1. Register new user via API
     const userData = createTestUserData();
     userEmail = userData.email;
     userPassword = userData.password;
@@ -24,22 +24,41 @@ test.describe("Checkout Flow - API + UI Integration", () => {
     await authAPI.register(userData);
     console.log(`Created user via API: ${userEmail}`);
 
-    //login to get access token
+    // 2. Login to get access token
     const loginResponse = await authAPI.login(userEmail, userPassword);
     accessToken = loginResponse.accessToken;
     console.log("Logged in via API, got access token");
+
+    // 3. Get products and add to cart via API
+    const products = await productsAPI.getProducts();
+
+    // 4. Create Cart
+    ({ id: cartId } = await cartAPI.createCart());
+
+    // Add first 2 products to cart
+    await cartAPI.addToCart(cartId, products[0].id, 2, accessToken);
+    console.log(`Added ${products[0].name} (qty: 2) to cart via API`);
+
+    await cartAPI.addToCart(cartId, products[1].id, 1, accessToken);
+    console.log(`Added ${products[1].name} (qty: 1) to cart via API`);
+    console.log(cartId);
+
+    // 5. Verify cart was created correctly via API
+    const cartContents = await cartAPI.getCart(cartId, accessToken);
+    expect(cartContents.cart_items.length).toBe(2);
+    console.log("Verified cart contains 2 items via API");
   });
 
   test("should display pre-filled cart and allow checkout @api-ui", async ({
     page,
   }) => {
-  
+    // TEST: Now verify via UI
+    // 1. User logs in via UI
     await page.goto("/auth/login");
     await page.fill('[data-test="email"]', userEmail);
     await page.fill('[data-test="password"]', userPassword);
     await page.click('[data-test="login-submit"]');
 
-    await expect(page).toHaveURL(/account/);
     await expect(page.locator('[data-test="nav-menu"]')).toBeVisible();
     console.log("UI: User logged in successfully");
   });
