@@ -75,5 +75,35 @@ test.describe("Checkout Flow - API + UI Integration", () => {
     await expect(page.locator('[data-test="product-title"]')).toHaveCount(2);
     await expect(page.locator('[data-test="product-quantity"]')).toHaveCount(2);
     console.log("UI: Product details displayed correctly");
+    // 5. Verify cart total
+    const cartTotal = page.locator('[data-test="cart-total"]');
+    await expect(cartTotal).toBeVisible();
+
+    // Get total text and ensure it's a valid number
+    const totalText = await cartTotal.textContent();
+    expect(totalText).toMatch(/\$\d+\.\d{2}/);
+    console.log(`UI: Cart total displayed: ${totalText}`);
+
+    // 6. Proceed to checkout
+    await page.click('[data-test="proceed-1"]');
+    await page.click('[data-test="proceed-2"]');
+
+    // Fill Billing Address from
+    await page.waitForTimeout(3000);
+    await page.selectOption('#country', 'AT'); // Selects Austria
+    await expect(page.locator('[data-test="country"]')).toHaveValue('AT');
+
+    // Fill Postal Code
+    await page.fill('input[data-test="postal_code"]', '11');
+    await expect(page.locator('[data-test="postal_code"]')).toHaveValue('11');
+
+    // Fill House Number
+    await page.fill('input[data-test="house_number"]', '111');
+    await expect(page.locator('[data-test="house_number"]')).toHaveValue('111');
+    await page.click('[data-test="proceed-3"]');
+
+    await page.selectOption('#payment-method', 'cash-on-delivery');
+    await page.click('[data-test="finish"]')
+    await expect(page.locator('[data-test="payment-success-message"]')).toBeVisible();
   });
 });
