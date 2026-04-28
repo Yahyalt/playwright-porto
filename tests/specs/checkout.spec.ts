@@ -61,5 +61,19 @@ test.describe("Checkout Flow - API + UI Integration", () => {
 
     await expect(page.locator('[data-test="nav-menu"]')).toBeVisible();
     console.log("UI: User logged in successfully");
+    //Set sessionStorage for cart and qty
+    await page.evaluate(({ cartId, qty }) => {
+      sessionStorage.setItem("cart_id", cartId);
+      sessionStorage.setItem("cart_quantity", String(qty));
+    }, { cartId, qty: 3 });
+    await page.reload();
+
+    // 2. User navigates to cart
+    await page.click('[data-test="nav-cart"]');
+    await page.waitForURL("**/checkout");
+    // 4. Verify product details are shown correctly
+    await expect(page.locator('[data-test="product-title"]')).toHaveCount(2);
+    await expect(page.locator('[data-test="product-quantity"]')).toHaveCount(2);
+    console.log("UI: Product details displayed correctly");
   });
 });
