@@ -107,4 +107,3 @@ test.describe("Checkout Flow - API + UI Integration", () => {
     await expect(page.locator('[data-test="payment-success-message"]')).toBeVisible();
   });
   });
-});
