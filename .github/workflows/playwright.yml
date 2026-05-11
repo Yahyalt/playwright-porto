@@ -5,6 +5,7 @@ on:
     branches: [main, master]
   pull_request:
     branches: [main, master]
+  workflow_dispatch:
 
 # Cancel an in-progress run when a new commit is pushed to the same branch.
 concurrency:
@@ -32,11 +33,20 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      - name: Create .env for tests (from secrets)
+        shell: bash
+        run: |
+          cat > .env <<'EOF'
+          URL=${{ secrets.URL || 'https://practicesoftwaretesting.com' }}
+          EMAIL=${{ secrets.EMAIL }}
+          PASSWORD=${{ secrets.PASSWORD }}
+          EOF
+
       - name: Install Playwright Browsers
         run: npx playwright install --with-deps chromium
 
       - name: Run Playwright tests
-        run: npx playwright test
+        run: npm test
 
       - name: Upload Playwright HTML report
         uses: actions/upload-artifact@v4
