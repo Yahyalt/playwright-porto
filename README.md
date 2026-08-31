@@ -8,6 +8,13 @@ Covers E2E UI testing, API testing, and hybrid API+UI flows.
 
 ## Tech Stack
 
+| Layer       | Tool                           |
+| ----------- | ------------------------------ |
+| Framework   | Playwright 1.47                |
+| Language    | TypeScript                     |
+| API Testing | Playwright `APIRequestContext` |
+| CI/CD       | GitHub Actions                 |
+| Reporting   | Playwright HTML Reporter       |
 | Layer | Tool |
 |---|---|
 | Framework | Playwright 1.47 |

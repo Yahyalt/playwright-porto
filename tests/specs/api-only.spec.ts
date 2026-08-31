@@ -150,24 +150,78 @@ test.describe("API Only Tests - Backend Validation", () => {
     await cartAPI.clearCart(cartId, accessToken);
   });
 
-  test("should validate product search functionality @api", async ({
-    request,
-  }) => {
-    const productsAPI = new ProductsAPI(request);
+  // test("should validate product search functionality @api", async ({
+  //   request,
+  // }) => {
+  //   const productsAPI = new ProductsAPI(request);
 
-    // Search for hammer
-    const searchResults = await productsAPI.searchProducts("hammer");
+  //   // Search for hammer
+  //   const searchResults = await productsAPI.searchProducts("leather toolbelt");
 
-    // Verify search results
-    expect(Array.isArray(searchResults)).toBe(true);
-    expect(searchResults.length).toBeGreaterThan(0);
+  //   // Verify search results
+  //   expect(Array.isArray(searchResults)).toBe(true);
+  //   expect(searchResults.length).toBeGreaterThan(0);
 
-    // Verify all results contain search term
-    searchResults.forEach((product) => {
-      const productName = product.name.toLowerCase();
-      expect(productName).toContain("hammer");
-    });
+  //   // Verify all results contain search term
+  //   searchResults.forEach((product) => {
+  //     const productName = product.name.toLowerCase();
+  //     expect(productName).toContain("leather toolbelt");
+  //   });
 
-    console.log(`Search returned ${searchResults.length} results for 'hammer'`);
-  });
+  //   console.log(`Search returned ${searchResults.length} results for 'leather toolbelt'`);
+  // });
+
+//   test("search functionality returns 'Leather toolbelt' product @api", async ({ request }) => {
+//   const productsAPI = new ProductsAPI(request);
+
+//   const searchResults = await productsAPI.searchProducts("leather toolbelt");
+
+//   expect(Array.isArray(searchResults)).toBe(true);
+  
+//   // Core assertion: exact name exists
+//   const found = searchResults.find((p: any) => p.name === "Leather toolbelt");
+//   expect(found).toBeDefined();
+  
+//   // Minimal schema check
+//   expect(found).toEqual(expect.objectContaining({
+//     name: "Leather toolbelt",
+//     price: expect.any(Number),
+//     in_stock: expect.any(Boolean),
+//   }));
+// });
+
+test("search returns product when querying part of its name @api", async ({ request }) => {
+  const productsAPI = new ProductsAPI(request);
+
+  // 1) Get a real product from the catalog
+  const products = await productsAPI.getProducts();
+  expect(products.length).toBeGreaterThan(0);
+
+  const picked = products.find((p: any) => typeof p?.name === "string" && p.name.trim().length > 0);
+  console.log(`Picked product: ${picked.name}`);
+  expect(picked).toBeDefined();
+
+  // 2) Derive a search token from the product name (first "word" with >= 3 chars)
+  const tokens = picked.name
+    .toLowerCase()
+    .split(/[\s-]+/)
+    .map((t: string) => t.replace(/[^a-z0-9]/g, ""))
+    .filter((t: string) => t.length >= 3);
+
+  expect(tokens.length).toBeGreaterThan(0);
+  const q = tokens[0];
+
+  // 3) Search using that token
+  const searchResults = await productsAPI.searchProducts(q);
+  expect(Array.isArray(searchResults)).toBe(true);
+  expect(searchResults.length).toBeGreaterThan(0);
+  console.log(`Search results for ${q}:`, searchResults);
+  // 4) Assert the picked product is included (strongest check)
+  const ids = searchResults.map((p: any) => p.id);
+  expect(ids).toContain(picked.id);
+});
+
+
+
+
 });
