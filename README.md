@@ -15,6 +15,13 @@ Covers E2E UI testing, API testing, and hybrid API+UI flows.
 | API Testing | Playwright `APIRequestContext` |
 | CI/CD       | GitHub Actions                 |
 | Reporting   | Playwright HTML Reporter       |
+| Layer | Tool |
+|---|---|
+| Framework | Playwright 1.47 |
+| Language | TypeScript |
+| API Testing | Playwright `APIRequestContext` |
+| CI/CD | GitHub Actions |
+| Reporting | Playwright HTML Reporter |
 
 ---
 
@@ -44,7 +51,6 @@ Covers E2E UI testing, API testing, and hybrid API+UI flows.
 ## Test Coverage
 
 ### API Tests (`api-only.spec.ts`)
-
 - User registration — response structure validation
 - Login with valid credentials — token assertion
 - Login with invalid credentials — error handling
@@ -54,12 +60,10 @@ Covers E2E UI testing, API testing, and hybrid API+UI flows.
 - Product search — result relevance validation
 
 ### Hybrid API + UI (`checkout.spec.ts`)
-
 - API setup (register + login) → UI execution
 - Pre-authenticated session via API, UI interaction via browser
 
 ### UI Tests (`home.spec.ts`)
-
 - Visual regression snapshot — homepage
 - Login via Page Object Model
 - API-seeded test user → UI login verification
@@ -81,7 +85,6 @@ Covers E2E UI testing, API testing, and hybrid API+UI flows.
 ## Setup
 
 ### Prerequisites
-
 - Node.js 18+
 - Git
 
